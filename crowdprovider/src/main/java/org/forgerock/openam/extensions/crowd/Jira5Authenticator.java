@@ -56,13 +56,12 @@ public class Jira5Authenticator extends JiraSeraphAuthenticator {
    @Override
    public Principal getUser(HttpServletRequest request,
                             HttpServletResponse response) {
-      Principal user = null;
-      
       // To allow Worklog assistant to be able to access the web services, normal authentication should be used instead of SSO authentication.
       if (request.getRequestURI() != null && (request.getRequestURI().startsWith("/rpc") || request.getRequestURI().startsWith("/rest"))) {
          return super.getUser(request, response);
       }
       else {
+         Principal user = null;
          try {
             String username = OpenAMUtil.obtainUsername(request);
             LOGGER.debug("Got username = {}", username);
