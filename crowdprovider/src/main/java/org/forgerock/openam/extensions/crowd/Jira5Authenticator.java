@@ -40,12 +40,12 @@ import com.atlassian.jira.security.login.JiraSeraphAuthenticator;
  * Note that this functionality is based on the older {@link OpenAMJiraAuthenticator}.
  * 
  * @author Dave van Eijck
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class Jira5Authenticator extends JiraSeraphAuthenticator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Jira5Authenticator.class);
+   private static final Logger LOGGER = LoggerFactory.getLogger(Jira5Authenticator.class);
 
    /**
     * {@inheritDoc}
@@ -57,11 +57,9 @@ public class Jira5Authenticator extends JiraSeraphAuthenticator {
    public Principal getUser(HttpServletRequest request,
                             HttpServletResponse response) {
       Principal user = null;
-
-      // To allow Worklog assistant to be able to access the web services, normal authentication should be used instead
-      // of SSO authentication.
-      if (request.getRequestURI() != null
-          && (request.getRequestURI().startsWith("/rpc") || request.getRequestURI().startsWith("/rest"))) {
+      
+      // To allow Worklog assistant to be able to access the web services, normal authentication should be used instead of SSO authentication.
+      if (request.getRequestURI() != null && (request.getRequestURI().startsWith("/rpc") || request.getRequestURI().startsWith("/rest"))) {
          return super.getUser(request, response);
       }
       else {
@@ -87,8 +85,8 @@ public class Jira5Authenticator extends JiraSeraphAuthenticator {
          catch (Exception e) {
             LOGGER.error("Exception occurred while getting user.", e);
          }
-      }
 
-      return user;
+         return user;
+      }
    }
 }
