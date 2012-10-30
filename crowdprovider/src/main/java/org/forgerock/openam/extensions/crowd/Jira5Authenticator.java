@@ -47,35 +47,48 @@ public class Jira5Authenticator extends JiraSeraphAuthenticator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Jira5Authenticator.class);
 
-    /**
-     * {@inheritDoc}
-     * 
-     * In this specific case it uses the OpenAM SDK client functionality to obtain the username from the OpenAM session and associate it to the JIRA user with the same username.
-     */
-    @Override
-    public Principal getUser(HttpServletRequest request, HttpServletResponse response) {
-        Principal user = null;
-        try {
+   /**
+    * {@inheritDoc}
+    * 
+    * In this specific case it uses the OpenAM SDK client functionality to obtain the username from the OpenAM session
+    * and associate it to the JIRA user with the same username.
+    */
+   @Override
+   public Principal getUser(HttpServletRequest request,
+                            HttpServletResponse response) {
+      Principal user = null;
+
+      // To allow Worklog assistant to be able to access the web services, normal authentication should be used instead
+      // of SSO authentication.
+      if (request.getRequestURI() != null
+          && (request.getRequestURI().startsWith("/rpc") || request.getRequestURI().startsWith("/rest"))) {
+         return super.getUser(request, response);
+      }
+      else {
+         try {
             String username = OpenAMUtil.obtainUsername(request);
             LOGGER.debug("Got username = {}", username);
 
             if (username != null) {
-                if (request.getSession() != null && request.getSession().getAttribute(LOGGED_IN_KEY) != null) {
-                    user = (Principal) request.getSession().getAttribute(LOGGED_IN_KEY);
-                    LOGGER.debug("Session found; user {} already logged in.", user.getName());
-                } else {
-                    user = getUser(username);
+               if (request.getSession() != null && request.getSession().getAttribute(LOGGED_IN_KEY) != null) {
+                  user = (Principal) request.getSession().getAttribute(LOGGED_IN_KEY);
+                  LOGGER.debug("Session found; user {} already logged in.", user.getName());
+               }
+               else {
+                  user = getUser(username);
 
-                    LOGGER.debug("Logged in via SSO, with User {}" + user.getName());
+                  LOGGER.debug("Logged in via SSO, with User {}" + user.getName());
 
-                    request.getSession().setAttribute(LOGGED_IN_KEY, user);
-                    request.getSession().setAttribute(LOGGED_OUT_KEY, null);
-                }
+                  request.getSession().setAttribute(LOGGED_IN_KEY, user);
+                  request.getSession().setAttribute(LOGGED_OUT_KEY, null);
+               }
             }
-        } catch (Exception e) {
+         }
+         catch (Exception e) {
             LOGGER.error("Exception occurred while getting user.", e);
-        }
+         }
+      }
 
-        return user;
-    }
+      return user;
+   }
 }
