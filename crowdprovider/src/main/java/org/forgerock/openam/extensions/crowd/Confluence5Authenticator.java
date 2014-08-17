@@ -43,9 +43,9 @@ import com.atlassian.confluence.user.ConfluenceAuthenticator;
  *
  */
 @SuppressWarnings("serial")
-public class Confluence4Authenticator extends ConfluenceAuthenticator {
+public class Confluence5Authenticator extends ConfluenceAuthenticator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Confluence4Authenticator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Confluence5Authenticator.class);
 
     /**
      * {@inheritDoc}

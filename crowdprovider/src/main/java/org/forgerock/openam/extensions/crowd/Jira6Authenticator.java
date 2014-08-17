@@ -43,9 +43,9 @@ import com.atlassian.jira.security.login.JiraSeraphAuthenticator;
  * 
  */
 @SuppressWarnings("serial")
-public class Jira5Authenticator extends JiraSeraphAuthenticator {
+public class Jira6Authenticator extends JiraSeraphAuthenticator {
 
-   private static final Logger LOGGER = LoggerFactory.getLogger(Jira5Authenticator.class);
+   private static final Logger LOGGER = LoggerFactory.getLogger(Jira6Authenticator.class);
 
    /**
     * {@inheritDoc}
